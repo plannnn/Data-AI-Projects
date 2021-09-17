@@ -1,8 +1,5 @@
-Daftar-Biodata-Siswa
-==
-Daftar biodata Siswa Dicoding Academy
---
-*biodata siswa terdiri dari 3 angkatan yaitu sebagai berikut*
-- Angkatan 2019
-- Angkatan 2020
-- Angkatan 2021
+List Beberapa Dataset Saham Market 
+<ol>Tesla(TSLA)</ol>
+<ol>Microsoft(MSFT)</ol>
+<ul>Apple(AAPL)</ul>
+<ul>Facebook(FB)</ul>
