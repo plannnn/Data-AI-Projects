@@ -8,14 +8,14 @@ Latar Belakang pemilihan topik ini adalah dikarenakan ingin melihat tingkat penj
 Penting bagi para pemilik mobil jika ingin menjual mobilnya melihat harga yang terdapat di pasaran, namun untuk para penjual cukup sulit untuk menentukan harga mobilnya agar mendapatkan harga yang sesuai keinginannya dan juga dapat terjual dengan mudah, oleh karena itu pembuatan prediksi harga yang cocok penting.
 ### Problem Statements
  - Berapa harga mobil bekas dengan jenis transmisi, jarak tempuh dan ukuran mesin tertentu?
- - Dari Karekteristik yang tersedia manakah yang paling berpengaruh?
+ - Dari Karakteristik yang tersedia manakah yang paling berpengaruh?
 ### Goals
-Membuat model Machine Learning yang dapat memberi prediksi harga mobil bekas C-Class dengan karekteristik yang tersedia
+Membuat model Machine Learning yang dapat memberi prediksi harga mobil bekas C-Class dengan karakteristik yang tersedia
 
 ### Solution statements
 Solusi yang diajukan antara lain adalah KNN dan Random Forest.
 Dengan pengertian:
-- **KNN/K-Nearest Neighbor**. Algoritma ini merupakan supervised learning dan mengelompokan suatu label dengan cara mencari kesesuaian dengan tetangga terdekat. KNN dipilih karena merupakan algoritma yang cocok dengan kasus regresi
+- **KNN/K-Nearest Neighbor**. Algoritma ini merupakan supervised learning dan mengelompokkan suatu label dengan cara mencari kesesuaian dengan tetangga terdekat. KNN dipilih karena merupakan algoritma yang cocok dengan kasus regresi
 - **RF/Random Forest**. Algoritma ini adalah supervised learning dan dapat menyelesaikan masalah regresi. Random Forest ini merupakan model yang terdiri dari beberapa model dan bekerja secara bersama-sama dan tiap model membuat prediksi secara independen dan digabungkan untuk membuat prediksi akhir. 
 
 ## Data Understanding
@@ -23,12 +23,12 @@ Dataset yang digunakan adalah dataset [*100,000 UK Used Car Data set*](https://w
 
 Variabel pada dataset ini adalah sebagai berikut.
 - model : Jenis mobil yang terjual
-- mileage : Jarak Tempuh Mobil
-- engineSize: Ukuran Volume Bahan Bakar dalam satuan liter
-- year : Tahun Pembelian Mobil
-- transmission : Jenis Setelan Transmisi
-- fuelType : Jenis Bahan Bakar yang digunakan
-- Price : Harga dalam kurs euro
+- *mileage* : Jarak Tempuh Mobil
+- *engine Size*: Ukuran Volume Bahan Bakar dalam satuan liter
+- *year* : Tahun Pembelian Mobil
+- *transmission* : Jenis Setelan Transmisi
+- *fuel Type* : Jenis Bahan Bakar yang digunakan
+- *Price* : Harga dalam kurs euro
 
 Apabila dilakukan Data Loading adalah sebagai berikut
 |id|Model|year|price|transmission|mileage|fuelType| engineSize|
@@ -58,8 +58,8 @@ Dataset tersebut juga dapat dilihat deskripsi statistiknya seperti berikut:
 Dikarenakan terdapat satu jenis yang memiliki nilai 0, maka data tersebut dihilangkan karena data tersebut hanya 1 yang memiliki nilai 0, dan karena penggunaan model semuanya C-Class maka dapat dihilangkan.
 
 Jenis Data diatas dapat dibedakan menjadi dua kategori:
-Kategorikal: Transmission dan FuelType
-Numerikal: Year, Price, Mileage, engineSize, dan Price
+Kategorikal : Transmission dan FuelType
+Numerikal : Year, Price, Mileage, engineSize, dan Price
 
 #### Visualisasi Data
 Apabila Jenis data dikategorikan seperti diatas dapat dilihat bentuk tabel dan grafik masing-masing data sebagai berikut:
@@ -84,7 +84,7 @@ Sebelum dataset melalui proses training, model sebelumnya perlu melalui proses p
 #### Train-Test Split
 Proses pembagian dataset menjadi data latih *(train)* dan data uji *(test)* merupakan hal yang saya pilih untuk lakukan sebelum membuat model. Hal ini karena data uji berperan sebagai data baru yang benar-benar belum pernah dilihat oleh model sebelumnya sehingga informasi yang terdapat pada data uji tidak mengotori informasi yang terdapat pada data latih, alasan lain mengapa menggunakan *train test split* karena untuk efisiensi dan tidak melakukan *data leakage* ketika melakukan scaling. 
 #### Standardisasi
-Data numerik yang terdapat di dataset akan dilakukan **Standardisasi** sehingga menghasilkan distribusi dengan nilai standar deviasi 1 dan mean 0. Hal tersebut dilakukan dengan tujuan untuk meningkatkan peforma algoritam machine learning dan membuatnya konvergen lebih cepat
+Data numerik yang terdapat di dataset akan dilakukan **Standardisasi** sehingga menghasilkan distribusi dengan nilai standar deviasi 1 dan mean 0. Hal tersebut dilakukan dengan tujuan untuk meningkatkan peforma algoritma machine learning dan membuatnya konvergen lebih cepat
 ```python
 numerical_features = ['year', 'mileage', 'engineSize']
 scaler = StandardScaler()
@@ -93,7 +93,7 @@ x_train[numerical_features] = scaler.transform(x_train.loc[:, numerical_features
 x_train[numerical_features].head()
 ```
 ## Modeling
-Pada Projek yang dibuat, digunakan model algoritma *Machine Learning* yaitu **K-Nearest Neighbours**, dan **Random Forest**. Model tersebut dipilih dikarenakan permasalahan dari model *Machine Learning* yang dibuat adalah permasalahan regresi. hasil dari model yang dipilih akan dibandingkan berdasarkan label yang telah terpilih sebelmunya yaitu *price*. Berikut adalah potongan kode dari model tersebut.
+Pada Proyek yang dibuat, digunakan model algoritma *Machine Learning* yaitu **K-Nearest Neighbours**, dan **Random Forest**. Model tersebut dipilih dikarenakan permasalahan dari model *Machine Learning* yang dibuat adalah permasalahan regresi. hasil dari model yang dipilih akan dibandingkan berdasarkan label yang telah terpilih sebelmunya yaitu *price*. Berikut adalah potongan kode dari model tersebut.
 ```python
 # KNN
 knn = KNeighborsRegressor(n_neighbors=10)
