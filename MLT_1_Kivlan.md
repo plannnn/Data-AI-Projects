@@ -3,18 +3,18 @@
 ## Domain Proyek
 Pada Projek **Machine Learning Terapan Pertama: membuat model Predictive Analysis**, saya menggunakan dataset berdomain ekonomi mengenai prediksi harga mobil Mercedes Benz C-Class.
 
-Latar Belakang pemilihan topik ini berdasarkan penggunaan mobil yang semakin cenderung untuk ke listrik, sehingga penggunaan mobil yang menggunaan bahan bakar alami akan semakin menurun. Oleh karena itu, dengan dibuatnya model prediksi ini, kita dapat memperkirakan harga mobil Mercedes Benz C-Class apabila dijual sebagai mobil bekas. 
+Latar Belakang pemilihan topik ini adalah dikarenakan ingin melihat tingkat penjualan mobil bekas, dimana dalam kasus ini mercedes C-Class, dengan fitur-fitur tertentu yang dapat mempengaruhi nilai di pasar. 
 ## Business Understanding
-Seiring dengan makin banyaknya jumlah mobil yang ada di muka bumi, penjualan mobil bekas seharusnya menjadi semakin banyak agar jumlah mobil di jalanan tidak semakin banyak. Oleh karena itu, dibuat **model prediksi harga mobil bekas** untuk para pemilik mobil dengan niatan untuk mempermudah dan memberi kecocokan dengan harga yang tersedia di pasaran.
+Penting bagi para pemilik mobil jika ingin menjual mobilnya melihat harga yang terdapat di pasaran, namun untuk para penjual cukup sulit untuk menentukan harga mobilnya agar mendapatkan harga yang sesuai keinginannya dan juga dapat terjual dengan mudah, oleh karena itu pembuatan prediksi harga yang cocok penting.
 ### Problem Statements
  - Berapa harga mobil bekas dengan jenis transmisi, jarak tempuh dan ukuran mesin tertentu?
  - Dari Karekteristik yang tersedia manakah yang paling berpengaruh?
 ### Goals
-Membuat model Machine Learning yang dapat memberi prediksi harga mobil bekas dengan karekteristik yang tersedia
+Membuat model Machine Learning yang dapat memberi prediksi harga mobil bekas C-Class dengan karekteristik yang tersedia
 
 ### Solution statements
-Solusi yang diajukan antara lain adalah KNN dan Random Forest, yang kemudian dipilih berdasarkan tingkat akurasi yang paling tinggi.
-Sebagai contoh:
+Solusi yang diajukan antara lain adalah KNN dan Random Forest.
+Dengan pengertian:
 - **KNN/K-Nearest Neighbor**. Algoritma ini merupakan supervised learning dan mengelompokan suatu label dengan cara mencari kesesuaian dengan tetangga terdekat. KNN dipilih karena merupakan algoritma yang cocok dengan kasus regresi
 - **RF/Random Forest**. Algoritma ini adalah supervised learning dan dapat menyelesaikan masalah regresi. Random Forest ini merupakan model yang terdiri dari beberapa model dan bekerja secara bersama-sama dan tiap model membuat prediksi secara independen dan digabungkan untuk membuat prediksi akhir. 
 
@@ -22,13 +22,13 @@ Sebagai contoh:
 Dataset yang digunakan adalah dataset [*100,000 UK Used Car Data set*](https://www.kaggle.com/adityadesai13/used-car-dataset-ford-and-mercedes?select=cclass.csv) dari situs Kaggle yang berisi data tentang mobil bekas yang terjual di UK dengan variable, mileage, model, engineSize, year, transmission, fuelType, dan price yang menjadi label pada data ini. Dataset ini memiliki 3899 dengan 7 kolom dengan 2 kategorikal dan 5 numerikal.
 
 Variabel pada dataset ini adalah sebagai berikut.
-- model : C-Class
+- model : Jenis mobil yang terjual
 - mileage : Jarak Tempuh Mobil
-- engineSize: Ukuran Volume Bahan Bakar
+- engineSize: Ukuran Volume Bahan Bakar dalam satuan liter
 - year : Tahun Pembelian Mobil
 - transmission : Jenis Setelan Transmisi
-- fuelType : Jenis Bahan Bakar
-- Price : Harga 
+- fuelType : Jenis Bahan Bakar yang digunakan
+- Price : Harga dalam kurs euro
 
 Apabila dilakukan Data Loading adalah sebagai berikut
 |id|Model|year|price|transmission|mileage|fuelType| engineSize|
@@ -82,9 +82,7 @@ Data Numerikal
 ## Data Preparation
 Sebelum dataset melalui proses training, model sebelumnya perlu melalui proses pemisahan antara data latih dan data test lalu melakukan scaling
 #### Train-Test Split
-Proses pembagian dataset menjadi data latih *(train)* dan data uji *(test)* merupakan hal yang harus dilakukan sebelum membuat model. Hal ini karena data uji berperan sebagai data baru yang benar-benar belum pernah dilihat oleh model sebelumnya sehingga informasi yang terdapat pada data uji tidak mengotori informasi yang terdapat pada data latih.
-
-Proses Train-Test Split ini perlu dilakukan karena tidak akan ada cukup data dalam set data pelatihan bagi model untuk mempelajari pemeetaan input ke output yang efektif. Juga tidak akan ada cukup data dalam set pengujian untuk mengevaluasi kinerja model secara efektif. Terutama untuk dataset size yang terbilang cukup besar, proses ini sangat membantu computational efficiency. Selain itu dalam proses transformasi data uji dan data latih harus dilakukan secara terpisah. Pada dataset yang dipakai pembagian antara data latih dan data uji adalah rasio 80:20, Sehingga dari total 3079 jumlah sampel yang ada, 2463 sampel merupakan data latih dan 616 sampel merupakan data uji.
+Proses pembagian dataset menjadi data latih *(train)* dan data uji *(test)* merupakan hal yang saya pilih untuk lakukan sebelum membuat model. Hal ini karena data uji berperan sebagai data baru yang benar-benar belum pernah dilihat oleh model sebelumnya sehingga informasi yang terdapat pada data uji tidak mengotori informasi yang terdapat pada data latih, alasan lain mengapa menggunakan *train test split* karena untuk efisiensi dan tidak melakukan *data leakage* ketika melakukan scaling. 
 #### Standardisasi
 Data numerik yang terdapat di dataset akan dilakukan **Standardisasi** sehingga menghasilkan distribusi dengan nilai standar deviasi 1 dan mean 0. Hal tersebut dilakukan dengan tujuan untuk meningkatkan peforma algoritam machine learning dan membuatnya konvergen lebih cepat
 ```python
@@ -131,4 +129,4 @@ Apabila dilakukan prediksi pada *KNN* dan *RF*
 |3682|12450|15166.5|13470.0|
 Dari Tabel dapat dilihat bahwa nilai *RF* lebih mendekati dengan nilai aslinya, sehingga model yang paling cocok adalah *RF* atau *Random Forest*
 ## Evaluation
-Dari Hasil yang didapat dari model yang telah dilakukan, model yang memliki nilai prediksi paling mendekati dengan nilai aslinya adalah model ***Random Forest*** yang nilai prediksinya paling bagus. Dari hasil yang didapat, model ***Random Forest*** yang diterapkan dan dikembangkan.
+Setelah melakukan Modeling dan prediksi, dapat dipilih model yang memiliki nilai prediksi paling mendekati dengan harga yang terjual. Berdasarkan hal tersebut, model *Random Forest* yang memiliki nilai prediksi paling mendekati dengan harga terjual.
