@@ -17,6 +17,7 @@ Solusi yang diajukan antara lain adalah KNN dan Random Forest.
 Dengan pengertian:
 - **KNN/K-Nearest Neighbor**. Algoritma ini merupakan supervised learning dan mengelompokkan suatu label dengan cara mencari kesesuaian dengan tetangga terdekat. KNN dipilih karena merupakan algoritma yang cocok dengan kasus regresi
 - **RF/Random Forest**. Algoritma ini adalah supervised learning dan dapat menyelesaikan masalah regresi. Random Forest ini merupakan model yang terdiri dari beberapa model dan bekerja secara bersama-sama dan tiap model membuat prediksi secara independen dan digabungkan untuk membuat prediksi akhir. 
+- **Boosting Algorithm**. Algoritma ini memiliki tujuan untuk meningkatkan performa dan akurasi prediksi, dengan cara menggabungkan model sedeharan dan "lemah" sehingga membantuk suatu model yang kuat.
 
 ## Data Understanding
 Dataset yang digunakan adalah dataset [*100,000 UK Used Car Data set*](https://www.kaggle.com/adityadesai13/used-car-dataset-ford-and-mercedes?select=cclass.csv) dari situs Kaggle yang berisi data tentang mobil bekas yang terjual di UK dengan variable, mileage, model, engineSize, year, transmission, fuelType, dan price yang menjadi label pada data ini. Dataset ini memiliki 3899 dengan 7 kolom dengan 2 kategorikal dan 5 numerikal.
@@ -44,6 +45,7 @@ Apabila dilakukan Data Loading adalah sebagai berikut
 |3896|C-Class|2014|11900|Manual|48055|Diesel|2.1|
 |3897|C-Class|2014|11300|Automatic|49865|Diesel|2.1|
 |3898|C-Class|2014|14800|Automatic|55445|Diesel|2.1|
+
 Dataset tersebut juga dapat dilihat deskripsi statistiknya seperti berikut:
 |Jenis|year|price|mileage|engineSize|
 |---|---|---|---|---|
@@ -55,6 +57,7 @@ Dataset tersebut juga dapat dilihat deskripsi statistiknya seperti berikut:
 |50%|2018.000000|22980.000000|14640.000000|2.000000|
 |75%|2019.000000|28900.000000|32458.500000|2.100000|
 |max|2020.000000|88995.000000|173000.000000|6.200000|
+
 Dikarenakan terdapat satu jenis yang memiliki nilai 0, maka data tersebut dihilangkan karena data tersebut hanya 1 yang memiliki nilai 0, dan karena penggunaan model semuanya C-Class maka dapat dihilangkan.
 
 Jenis Data diatas dapat dibedakan menjadi dua kategori:
@@ -69,6 +72,7 @@ Apabila Jenis data dikategorikan seperti diatas dapat dilihat bentuk tabel dan g
 |Automatic|1628|41.8|
 |Manual|198|5.1|
 |Other|1|0.0|
+
 ![Tabel Transmisi](https://raw.githubusercontent.com/plannnn/assetspenting/main/assetMLT/MLT_transmission.png)
 |Jenis Fuel|Jumlah Sampel|Persentase|
 |:---:|:---:|:---:|
@@ -76,9 +80,14 @@ Apabila Jenis data dikategorikan seperti diatas dapat dilihat bentuk tabel dan g
 |Petrol|1402|36.0|
 |Hybrid|151|3.9|
 |Other|6|0.2|
+
 ![Tabel Fuel](https://github.com/plannnn/assetspenting/blob/main/assetMLT/MLT_fuelType.png?raw=true)
 Data Numerikal
 ![Tabel Fuel](https://github.com/plannnn/assetspenting/blob/main/assetMLT/MLT_numerikal.png?raw=true)
+
+Correlation Matrix
+![Tabel Fuel](https://github.com/plannnn/assetspenting/blob/main/assetMLT/MLT_correlation.png?raw=true)
+Dapat dilihat dari *Correlation Matrix* dengan fitur target *price*, memiliki nilai korelasi yang cukup besar dengan fitur-fitur lainnya 
 ## Data Preparation
 Sebelum dataset melalui proses training, model sebelumnya perlu melalui proses pemisahan antara data latih dan data test lalu melakukan scaling
 #### Train-Test Split
@@ -93,7 +102,7 @@ x_train[numerical_features] = scaler.transform(x_train.loc[:, numerical_features
 x_train[numerical_features].head()
 ```
 ## Modeling
-Pada Proyek yang dibuat, digunakan model algoritma *Machine Learning* yaitu **K-Nearest Neighbours**, dan **Random Forest**. Model tersebut dipilih dikarenakan permasalahan dari model *Machine Learning* yang dibuat adalah permasalahan regresi. hasil dari model yang dipilih akan dibandingkan berdasarkan label yang telah terpilih sebelmunya yaitu *price*. Berikut adalah potongan kode dari model tersebut.
+Pada Proyek yang dibuat, digunakan model algoritma *Machine Learning* yaitu **K-Nearest Neighbours**, **Random Forest**, dan **Boosting Algorithm**. Model tersebut dipilih dikarenakan permasalahan dari model *Machine Learning* yang dibuat adalah permasalahan regresi. hasil dari model yang dipilih akan dibandingkan berdasarkan label yang telah terpilih sebelumnya yaitu *price*. Berikut adalah potongan kode dari model tersebut.
 ```python
 # KNN
 knn = KNeighborsRegressor(n_neighbors=10)
@@ -102,31 +111,32 @@ y_pred_knn = knn.predict(x_train)
 # RF
 RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1, min_samples_split=3)
 RF.fit(x_train, y_train)
- 
-models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(x_train), y_true=y_train)   
+
+models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(x_train), y_true=y_train) 
+#Adaptive
+boosting = AdaBoostRegressor(n_estimators=50, learning_rate=0.05, random_state=55)                             
+boosting.fit(X_train, y_train)
+models.loc['train_mse','Boosting'] = mean_squared_error(y_pred=boosting.predict(X_train), y_true=y_train)
 ```
-Setelah model dibuat dan dilakukan, dapat dilihat akurasi dari masing-masing model
-```python
-mse = pd.DataFrame(columns=['train', 'test'], index=['KNN','RF'])
-model_dict = {'KNN': knn, 'RF': RF}
-for name, model in model_dict.items():
-    mse.loc[name, 'train'] = mean_squared_error(y_true=y_train, y_pred=model.predict(x_train))/1e3 
-    mse.loc[name, 'test'] = mean_squared_error(y_true=y_test, y_pred=model.predict(x_test))/1e3
- 
-mse
-```
+## Evaluation
+Untuk mengevaluasi model digunakan metrik **MSE (Mean Squarred Error)**
+
+#### Mean Squarred Error
+MSE, menghitung selisih rata-rata nilai sebenarnya dengan nilai prediksi.
 
 |Jenis|train|test|
 |---|---|---|
 |KNN|6485.57|7809.62|
 |RF|2218.91|8659.94|
-![akurasi](https://github.com/plannnn/assetspenting/blob/main/assetMLT/MLT_akurasi.png?raw=true)
-Nilai Error yang muncul dari *KNN* dan *RF* dapat dilihat diatas, dengan nilai error yang terlihat di *RF* yang paling bagus.
+|Boosting|12004.1|11898.7|
 
-Apabila dilakukan prediksi pada *KNN* dan *RF*
-|y_true|prediksi_KNN|prediksi_RF|
-|:---:|:---:|:---:|
-|3682|12450|15166.5|13470.0|
+![akurasi](https://github.com/plannnn/assetspenting/blob/main/assetMLT/MLT_akurasiPT1.png?raw=true)
+Nilai Error yang muncul dari *KNN*,*RF*, dan *Boosting* dapat dilihat diatas, dengan nilai error yang terlihat di *RF* yang paling bagus.
+
+Apabila dilakukan prediksi pada *KNN*, *RF*, *Boosting*
+|id|y_true|prediksi_KNN|prediksi_RF|prediksi_Boosting|
+|:---:|:---:|:---:|:---:|:---:|
+|3682|12450|15166.5|13470.0|18896.5|
+
 Dari Tabel dapat dilihat bahwa nilai *RF* lebih mendekati dengan nilai aslinya, sehingga model yang paling cocok adalah *RF* atau *Random Forest*
-## Evaluation
 Setelah melakukan Modeling dan prediksi, dapat dipilih model yang memiliki nilai prediksi paling mendekati dengan harga yang terjual. Berdasarkan hal tersebut, model *Random Forest* yang memiliki nilai prediksi paling mendekati dengan harga terjual.
