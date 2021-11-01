@@ -13,11 +13,13 @@ Dengan semakin banyaknya konten yang menarik untuk pengguna layanan maka dibutuh
 
 ### Problem Statements
 
-- Rekomendasi seperti apa yang dapat diberikan kepada pengguna?
+- Sistem rekomendasi seperti apa yang dapat memberikan rekomendasi dengan baik?
+- Bagaimana membangun model yang dapat memberikan rekomendasi film yang akurat ?
 
 ### Goals
 
-- Sistem rekomendasi dapat memberi rekomendasi berdasarkan judul Anime yang mereka sukai
+- Membuat sistem rekomendasi yang dapat memberikan 5 rekomendasi film/acara kepada pengguna
+- Dengan membuat sistem rekomendasi menggunakan content-based filtering yang dapat memberi rekomendasi berdasarkan Anime yang disukai
 
 ### Solution Approach
 
@@ -29,8 +31,8 @@ Langkah-langkah yang dilakukan dalam  menyelesaikan proyek ini:
   - Menghapus *Missing Value* pada data
   - Melakukan perubahan kata
   - Menghapus data duplikat
-    - Konversi label kolom menjadi *one-hot encoding*
-    - Standarisasi label numerik
+  - Konversi label kolom menjadi *one-hot encoding*
+  - Standarisasi label numerik
 
 - Pemodelan
   Sistem rekomendasi yang akan dibuat project ini berbasis konten (*content-based filtering*) berdasarkan genre, type, jumlah episode, dan rating yang dapat memberi rekomendasi berdasar item yang mirip dengan item yang disukai penonton lainnya. Keuntungan dari *content-base filtering* adalah model tidak perlu data dari penonton lain, sehingga rekomendasi dapat dilakukan ke penonton secara spesifik, namun kekurangan dari *content-base filtering* adalah model hanya dapat memberikan rekomendasi dari content yang sebelumnya disukai penonton, sehingga tidak dapat memberikan rekomendasi ke hal lain. [Content Base Filtering]([Content-based Filtering Advantages & Disadvantages (google.com)](https://developers.google.com/machine-learning/recommendation/content-based/summary))
@@ -88,11 +90,15 @@ Apabila dilakukan Data Loading adalah sebagai berikut
 
 - Melihat Distribusi Genre pada dataset
 
-![info](https://cdn.discordapp.com/attachments/841304133868191794/903906041585086474/unknown.png)
+![info](https://cdn.discordapp.com/attachments/841304133868191794/904656785829412904/unknown.png)
 
 - Melihat distribusi episodes pada dataset
 
   ![info](https://cdn.discordapp.com/attachments/841304133868191794/903914668073025546/unknown.png)
+
+  Apabila dilihat satu per satu
+
+  ![info](https://cdn.discordapp.com/attachments/841304133868191794/904659278017749002/unknown.png)
 
   Dapat dilihat dari grafik diatas, terdapat jumlah episode *'unknown'*, data tersebut dapat didrop.
 
