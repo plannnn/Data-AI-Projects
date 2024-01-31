@@ -1,0 +1,3 @@
+Game Sales - https://www.kaggle.com/datasets/asaniczka/video-game-sales-2024
+Dementia Patients - https://www.kaggle.com/datasets/kaggler2412/dementia-patient-health-and-prescriptions-dataset
+Good Read Books - https://www.kaggle.com/datasets/cristaliss/ultimate-book-collection-top-100-books-up-to-2023
